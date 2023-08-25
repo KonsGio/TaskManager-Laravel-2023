@@ -30,8 +30,9 @@ class TaskController extends Controller
 
         session()->push('tasks', $task);
 
-        return redirect('/')->with('success', 'Task has been created successfully.');
-    }
+        return redirect('/')
+        ->with('success', "Task '{$task['title']}' has been created successfully.");
+        }
 
     public function complete($taskIndex)
     {
@@ -42,8 +43,9 @@ class TaskController extends Controller
             session(['tasks' => $tasks]);
         }
 
-        return redirect('/')->with('success', 'Task has been completed.');
-    }
+        return redirect('/')
+        ->with('success', "Task '{$tasks[$taskIndex]['title']}' has been completed.");
+        }
 
     public function destroy($taskIndex)
     {
@@ -54,8 +56,9 @@ class TaskController extends Controller
             session(['tasks' => $tasks]);
         }
 
-        return redirect('/')->with('success', 'Task has been deleted successfully.');
-    }
+        return redirect('/')
+        ->with('success', "Task '{$tasks[$taskIndex]['title']}' has been deleted successfully.");
+        }
 
     public function restore($index)
     {
@@ -66,8 +69,9 @@ class TaskController extends Controller
             session(['tasks' => $tasks]);
         }
     
-        return redirect()->back()->with('success', 'Task has been restored.');
-    }
+        return redirect()->back()
+        ->with('success', "Task '{$tasks[$index]['title']}' has been restored.");
+        }
 
     public function edit($index)
     {
@@ -93,8 +97,9 @@ class TaskController extends Controller
             $tasks[$index]['title'] = $request->input('title');
             session(['tasks' => $tasks]);
     
-            return redirect('/')->with('success', 'Task has been updated successfully.');
-        }
+            return redirect('/')
+            ->with('success', "Task '{$tasks[$index]['title']}' has been updated successfully.");
+                }
     
         return redirect()->back()->with('error', 'Task not found.');
     }
