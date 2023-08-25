@@ -28,11 +28,13 @@ class TaskController extends Controller
             'completed' => false,
         ];
 
-        session()->push('tasks', $task);
+        $tasks = session('tasks', []);
+        $tasks[] = $task;
+        session(['tasks' => $tasks]);
 
         return redirect('/')
-        ->with('success', "Task '{$task['title']}' has been created successfully.");
-        }
+            ->with('success', "Task '{$task['title']}' has been created successfully.");
+    }
 
     public function complete($taskIndex)
     {
@@ -44,21 +46,24 @@ class TaskController extends Controller
         }
 
         return redirect('/')
-        ->with('success', "Task '{$tasks[$taskIndex]['title']}' has been completed.");
-        }
+            ->with('success', "Task '{$tasks[$taskIndex]['title']}' has been completed.");
+    }
 
     public function destroy($taskIndex)
     {
         $tasks = session('tasks', []);
 
         if (isset($tasks[$taskIndex])) {
+            $deletedTaskTitle = $tasks[$taskIndex]['title'];
             array_splice($tasks, $taskIndex, 1);
             session(['tasks' => $tasks]);
+            return redirect('/')
+                ->with('success', "Task '{$deletedTaskTitle}' has been deleted successfully.");
         }
 
         return redirect('/')
-        ->with('success', "Task '{$tasks[$taskIndex]['title']}' has been deleted successfully.");
-        }
+            ->with('error', "Task not found.");
+    }
 
     public function restore($index)
     {
@@ -70,8 +75,8 @@ class TaskController extends Controller
         }
     
         return redirect()->back()
-        ->with('success', "Task '{$tasks[$index]['title']}' has been restored.");
-        }
+            ->with('success', "Task '{$tasks[$index]['title']}' has been restored.");
+    }
 
     public function edit($index)
     {
@@ -94,14 +99,14 @@ class TaskController extends Controller
         $tasks = session('tasks', []);
     
         if (isset($tasks[$index])) {
+            $oldTitle = $tasks[$index]['title'];
             $tasks[$index]['title'] = $request->input('title');
             session(['tasks' => $tasks]);
     
             return redirect('/')
-            ->with('success', "Task '{$tasks[$index]['title']}' has been updated successfully.");
-                }
+                ->with('success', "Task '{$oldTitle}' has been updated successfully.");
+        }
     
         return redirect()->back()->with('error', 'Task not found.');
     }
-
 }
