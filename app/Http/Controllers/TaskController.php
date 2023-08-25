@@ -56,4 +56,43 @@ class TaskController extends Controller
 
         return redirect('/');
     }
+
+    public function restore($index)
+    {
+        $tasks = session('tasks', []);
+    
+        if (isset($tasks[$index])) {
+            $tasks[$index]['completed'] = false;
+            session(['tasks' => $tasks]);
+        }
+    
+        return redirect()->back()->with('success', 'Task has been restored.');
+    }
+
+    public function edit($index)
+    {
+        $tasks = session('tasks', []);
+
+        if (isset($tasks[$index])) {
+            $task = $tasks[$index];
+            return view('tasks.edit', compact('task', 'index'));
+        }
+
+        return redirect()->back()->with('error', 'Task not found.');
+    }
+
+    public function update(Request $request, $index)
+    {
+        $tasks = session('tasks', []);
+    
+        if (isset($tasks[$index])) {
+            $tasks[$index]['title'] = $request->input('title');
+            session(['tasks' => $tasks]);
+    
+            return redirect('/')->with('success', 'Task has been updated.');
+        }
+    
+        return redirect()->back()->with('error', 'Task not found.');
+    }
+
 }
