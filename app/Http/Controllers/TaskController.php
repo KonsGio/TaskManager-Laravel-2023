@@ -20,7 +20,7 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required|max:255',
+            'title' => 'required|max:30', 
         ]);
 
         $task = [
@@ -30,7 +30,7 @@ class TaskController extends Controller
 
         session()->push('tasks', $task);
 
-        return redirect('/');
+        return redirect('/')->with('success', 'Task has been created successfully.');
     }
 
     public function complete($taskIndex)
@@ -42,7 +42,7 @@ class TaskController extends Controller
             session(['tasks' => $tasks]);
         }
 
-        return redirect('/');
+        return redirect('/')->with('success', 'Task has been completed.');
     }
 
     public function destroy($taskIndex)
@@ -54,7 +54,7 @@ class TaskController extends Controller
             session(['tasks' => $tasks]);
         }
 
-        return redirect('/');
+        return redirect('/')->with('success', 'Task has been deleted successfully.');
     }
 
     public function restore($index)
@@ -83,13 +83,17 @@ class TaskController extends Controller
 
     public function update(Request $request, $index)
     {
+        $this->validate($request, [
+            'title' => 'required|max:30', 
+        ]);
+    
         $tasks = session('tasks', []);
     
         if (isset($tasks[$index])) {
             $tasks[$index]['title'] = $request->input('title');
             session(['tasks' => $tasks]);
     
-            return redirect('/')->with('success', 'Task has been updated.');
+            return redirect('/')->with('success', 'Task has been updated successfully.');
         }
     
         return redirect()->back()->with('error', 'Task not found.');
