@@ -1,4 +1,4 @@
-# Task Manager Web Application![Task Manager Screenshot](public\images\TaskManager.png)
+# Task Manager Web Application![Task Manager Screenshot](/public/images/TaskManager.png)
 
 This is a simple web application for managing tasks. Users can create, edit, mark as complete, restore, and delete tasks.
 
