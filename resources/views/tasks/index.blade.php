@@ -5,18 +5,19 @@
         <h1>Task List</h1>
         <ul class="list-group">
             @foreach($tasks as $index => $task)
-            <li class="list-group-item d-flex justify-content-between align-items-center {{ $task['completed'] ? 'bg-light' : '' }}">
+            <li class="list-group-item task-item clickable-task-item d-flex pointer justify-content-between align-items-center {{ $task['completed'] ? 'bg-light' : '' }}">
                     <div class="d-flex align-items-center">
                         @if (!$task['completed'])
                             <form action="{{ route('tasks.complete', $index) }}" method="post">
                                 @method('PATCH')
                                 @csrf
-                                <button type="submit" class="btn btn-success btn-md">
-                                    <input type="hidden" name="completed" value="1">
-                                </button>
+                                <input type="checkbox" name="completed" value="1" onchange="this.form.submit()" {{ $task['completed'] ? 'checked' : '' }}>
                             </form>
                         @endif
+                         <div class="d-flex align-items-center">
+                        <span class="badge bg-success me-2 {{ $task['completed'] ? 'd-inline' : 'd-none' }}">Completed</span>
                         <span class="ms-2 {{ $task['completed'] ? 'text-decoration-line-through' : '' }}">{{ $task['title'] }}</span>
+                         </div>
                     </div>
                     <div class="btn-group" role="group">
                         @if ($task['completed'])
@@ -47,4 +48,13 @@
         </ul>
         <a href="{{ url('/tasks/create') }}" class="btn btn-primary mt-3">Add New Task</a>
     </div>
+    
+    <style>
+        .task-item:hover {
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+    </style>
+
+
 @endsection
